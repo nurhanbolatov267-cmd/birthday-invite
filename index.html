@@ -48,8 +48,7 @@
 </div>
 
 <audio id="bgMusic" loop preload="auto">
-    <source src="https://cdn.pixabay.com/audio/2022/10/26/audio_03d2745a90.mp3" type="audio/mpeg">
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <source id="musicSource" src="https://cdn.pixabay.com/audio/2022/10/26/audio_03d2745a90.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -64,6 +63,7 @@
     const photos = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"]; 
     let currentIndex = 0;
 
+    // Слайдер фото
     setInterval(() => {
         mainPhoto.style.opacity = 0;
         setTimeout(() => {
@@ -83,35 +83,22 @@
     noBtn.addEventListener('mouseover', moveBtn);
     noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveBtn(); });
 
-    // Попытка запустить музыку при клике
     function startParty() {
-        // Устанавливаем громкость и пробуем играть
-        bgMusic.volume = 0.6;
-        
-        let playAttempt = bgMusic.play();
-
-        if (playAttempt !== undefined) {
-            playAttempt.then(() => {
-                console.log("Музыка заиграла!");
-            }).catch(error => {
-                console.log("Ошибка воспроизведения:", error);
-                // Если не сработало, пробуем еще раз принудительно
-                bgMusic.muted = false;
-                bgMusic.play();
-            });
-        }
+        // Принудительная загрузка и запуск
+        bgMusic.load();
+        bgMusic.play().catch(e => console.log("Браузер заблокировал звук. Нужно нажать еще раз."));
 
         mainPhoto.style.filter = "blur(0px)";
         document.getElementById('message').style.display = 'block';
         yesBtn.style.display = 'none';
         noBtn.style.display = 'none';
 
-        const duration = 4 * 1000;
+        const duration = 5 * 1000;
         const end = Date.now() + duration;
 
         (function frame() {
-            confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff69b4', '#ffffff', '#ffd700'] });
-            confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff69b4', '#ffffff', '#ffd700'] });
+            confetti({ particleCount: 4, angle: 60, spread: 60, origin: { x: 0 }, colors: ['#ff69b4', '#ffffff', '#ffd700'] });
+            confetti({ particleCount: 4, angle: 120, spread: 60, origin: { x: 1 }, colors: ['#ff69b4', '#ffffff', '#ffd700'] });
             if (Date.now() < end) { requestAnimationFrame(frame); }
         }());
     }
