@@ -8,17 +8,36 @@
     <style>
         body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; height: 100vh; display: flex; justify-content: center; align-items: center; color: white; text-align: center; overflow: hidden; background: #1a1a1a; }
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('1.jpg') center/cover no-repeat; filter: blur(20px) brightness(0.4); z-index: -1; }
+        
         .card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); padding: 30px 20px; border-radius: 25px; max-width: 350px; width: 85%; box-shadow: 0 15px 50px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.15); position: relative; z-index: 2; }
+        
         h1 { font-size: 24px; margin: 0 0 10px 0; letter-spacing: 1px; }
         #guest { font-size: 20px; margin-bottom: 20px; color: #ffd700; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         .highlight { font-weight: bold; display: block; margin: 12px 0; font-size: 16px; color: #ffebf3; }
-        .invite-photo { width: 100%; max-width: 250px; height: 320px; object-fit: cover; border-radius: 20px; margin: 0 auto 20px; display: block; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.3); filter: blur(15px); transition: opacity 0.8s ease, filter 1.2s ease; }
+        
+        .invite-photo { 
+            width: 100%; 
+            max-width: 250px; 
+            height: 320px; 
+            object-fit: cover; 
+            border-radius: 20px; 
+            margin: 0 auto 20px; 
+            display: block; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            border: 2px solid rgba(255,255,255,0.3); 
+            filter: blur(15px); 
+            transition: opacity 0.8s ease, filter 1.2s ease; 
+        }
+
         .bottom-info { background: rgba(0, 0, 0, 0.5); padding: 15px; border-radius: 15px; font-size: 13px; line-height: 1.6; text-align: left; border: 1px solid rgba(255,255,255,0.1); }
         .bottom-info a { color: #00ff88; text-decoration: none; font-weight: bold; }
-        .btn-container { height: 70px; margin-top: 20px; display: flex; justify-content: center; align-items: center; gap: 15px; }
+
+        .btn-container { height: 70px; margin-top: 20px; display: flex; justify-content: center; align-items: center; gap: 15px; position: relative; }
+        
         button { font-size: 16px; padding: 12px 25px; border: none; border-radius: 15px; cursor: pointer; font-weight: bold; transition: transform 0.2s; }
-        #yes { background: linear-gradient(135deg, #00c853, #b2ff59); color: #003300; box-shadow: 0 4px 15px rgba(0,200,83,0.4); }
-        #no { background: #ff1744; color: white; transition: 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
+        #yes { background: linear-gradient(135deg, #00c853, #b2ff59); color: #003300; box-shadow: 0 4px 15px rgba(0,200,83,0.4); z-index: 10; }
+        #no { background: #ff1744; color: white; transition: 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28); z-index: 5; }
+        
         #message { display: none; margin-top: 20px; font-size: 18px; font-weight: bold; color: #00ff88; text-shadow: 0 0 10px rgba(0,255,136,0.5); }
     </style>
 </head>
@@ -41,14 +60,14 @@
     </div>
 
     <div class="btn-container">
-        <button id="yes" onclick="startParty()">Я приду 😍</button>
+        <button id="yes">Я приду 😍</button>
         <button id="no">Не приду 😢</button>
     </div>
     <div id="message">✨ ТЫ В СПИСКЕ ГОСТЕЙ ✨</div>
 </div>
 
 <audio id="bgMusic" loop preload="auto">
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <source src="https://cdn.pixabay.com/audio/2022/10/26/audio_03d2745a90.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -60,9 +79,11 @@
     const bgMusic = document.getElementById('bgMusic');
     const mainPhoto = document.getElementById('mainPhoto');
 
+    // Список твоих фото (5 штук)
     const photos = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"]; 
     let currentIndex = 0;
 
+    // Слайдер фотографий (автоматический)
     setInterval(() => {
         mainPhoto.style.opacity = 0;
         setTimeout(() => {
@@ -72,6 +93,7 @@
         }, 800);
     }, 3500);
 
+    // Кнопка "Нет" убегает
     function moveBtn() {
         noBtn.style.position = 'fixed';
         const maxX = window.innerWidth - noBtn.offsetWidth - 30;
@@ -82,13 +104,18 @@
     noBtn.addEventListener('mouseover', moveBtn);
     noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveBtn(); });
 
+    // Функция запуска праздника
     function startParty() {
-        bgMusic.play();
+        // Запуск музыки
+        bgMusic.play().catch(e => console.log("Ошибка звука:", e));
+
+        // Визуальные изменения
         mainPhoto.style.filter = "blur(0px)";
         document.getElementById('message').style.display = 'block';
         yesBtn.style.display = 'none';
         noBtn.style.display = 'none';
 
+        // Праздничный взрыв конфетти (3 секунды)
         var end = Date.now() + (3 * 1000);
         var colors = ['#ff69b4', '#ffffff', '#ffd700'];
 
@@ -98,6 +125,13 @@
             if (Date.now() < end) { requestAnimationFrame(frame); }
         }());
     }
+
+    // Привязываем запуск к кнопке "Да"
+    yesBtn.addEventListener('click', startParty);
+
+    // Фоновая подготовка аудио при первом касании экрана гостем
+    window.addEventListener('touchstart', () => { bgMusic.load(); }, { once: true });
+    window.addEventListener('mousedown', () => { bgMusic.load(); }, { once: true });
 </script>
 </body>
 </html>
