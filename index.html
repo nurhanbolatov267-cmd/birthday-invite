@@ -48,7 +48,7 @@
 </div>
 
 <audio id="bgMusic" loop preload="auto">
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-17.mp3" type="audio/mpeg">
+    <source src="https://cdn.pixabay.com/audio/2022/10/26/audio_03d2745a90.mp3" type="audio/mpeg">
 </audio>
 
 <script>
@@ -60,8 +60,8 @@
     const bgMusic = document.getElementById('bgMusic');
     const mainPhoto = document.getElementById('mainPhoto');
 
-    // Названия твоих фото (у тебя их 4 на гитхабе)
-    const photos = ["1.jpg", "2.jpg", "3.jpg", "4.jpg"]; 
+    // ТЕПЕРЬ 5 ФОТОГРАФИЙ
+    const photos = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"]; 
     let currentIndex = 0;
 
     // Слайдер фото
@@ -87,32 +87,34 @@
 
     // Главная функция при согласии
     function startParty() {
-        bgMusic.volume = 0.5;
-        bgMusic.play();
+        bgMusic.volume = 0.7; // Чуть громче
+        bgMusic.play().catch(error => {
+            console.log("Нужен клик для запуска звука");
+        });
 
         mainPhoto.style.filter = "blur(0px)";
         document.getElementById('message').style.display = 'block';
         yesBtn.style.display = 'none';
         noBtn.style.display = 'none';
 
-        // Взрыв конфетти
-        const duration = 3 * 1000;
+        // Взрыв конфетти (Розовый, Белый, Золотой)
+        const duration = 4 * 1000;
         const end = Date.now() + duration;
 
         (function frame() {
             confetti({
-                particleCount: 5,
+                particleCount: 4,
                 angle: 60,
                 spread: 55,
                 origin: { x: 0 },
-                colors: ['#ff69b4', '#ffffff']
+                colors: ['#ff69b4', '#ffffff', '#ffd700']
             });
             confetti({
-                particleCount: 5,
+                particleCount: 4,
                 angle: 120,
                 spread: 55,
                 origin: { x: 1 },
-                colors: ['#ff69b4', '#ffffff']
+                colors: ['#ff69b4', '#ffffff', '#ffd700']
             });
 
             if (Date.now() < end) {
