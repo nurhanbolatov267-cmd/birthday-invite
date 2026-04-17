@@ -30,26 +30,24 @@
         h1 { font-size: 20px; margin: 5px 0; letter-spacing: 1px; }
         #guest { font-size: 18px; margin: 5px 0 10px; color: #ffd700; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
         
-        /* РОЗОВЫЙ НЕОН */
+        /* ГЛАВНОЕ ИЗМЕНЕНИЕ: Мягкий, "немножко неоновый" стиль */
         .highlight { 
             font-weight: bold; 
             display: block; 
             margin: 8px 0; 
             font-size: 16px; 
-            color: #ff69b4; 
+            color: #ffb6c1; /* Светло-розовый цвет, более нежный */
             text-transform: uppercase;
             letter-spacing: 1px;
-            animation: neonPink 1.5s ease-in-out infinite alternate; 
-        }
-
-        @keyframes neonPink {
-            0% { text-shadow: 0 0 5px #fff, 0 0 10px #ff69b4, 0 0 15px #ff69b4; }
-            100% { text-shadow: 0 0 10px #fff, 0 0 20px #ff69b4, 0 0 30px #ff69b4, 0 0 40px #ff1493; }
+            /* Легкое, фиксированное свечение (без анимации) */
+            text-shadow: 
+                0 0 3px #fff,    /* Белое ядро */
+                0 0 8px #ff69b4; /* Розовый мягкий туман */
         }
 
         .invite-photo { 
             width: 100%; 
-            height: 210px; /* Уменьшили высоту, чтобы кнопки влезли */
+            height: 210px; /* Адаптировано под мобилки */
             object-fit: cover; 
             border-radius: 15px; 
             margin: 5px auto; 
@@ -136,9 +134,8 @@
     noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveBtn(); });
 
     function startParty() {
-        // Устанавливаем громкость и запускаем ту самую музыку
         bgMusic.volume = 0.5;
-        bgMusic.play().catch(e => console.log("Музыка не смогла запуститься"));
+        bgMusic.play().catch(e => console.log("Музыка не запустилась"));
 
         mainPhoto.style.filter = "blur(0px)";
         document.getElementById('message').style.display = 'block';
