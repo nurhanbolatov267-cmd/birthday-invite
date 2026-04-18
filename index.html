@@ -9,95 +9,63 @@
         body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; height: 100vh; display: flex; justify-content: center; align-items: center; color: white; text-align: center; overflow: hidden; background: #1a1a1a; }
         body::before { content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: url('1.jpg') center/cover no-repeat; filter: blur(20px) brightness(0.4); z-index: -1; }
         
-        /* АНИМАЦИЯ ТРЯСКИ */
-        @keyframes shake {
-            0% { transform: translate(1px, 1px) rotate(0deg); }
-            10% { transform: translate(-1px, -2px) rotate(-1deg); }
-            20% { transform: translate(-3px, 0px) rotate(1deg); }
-            30% { transform: translate(3px, 2px) rotate(0deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            50% { transform: translate(-1px, 2px) rotate(-1deg); }
-            60% { transform: translate(-3px, 1px) rotate(0deg); }
-            70% { transform: translate(3px, 1px) rotate(-1deg); }
-            80% { transform: translate(-1px, -1px) rotate(1deg); }
-            90% { transform: translate(1px, 2px) rotate(0deg); }
-            100% { transform: translate(1px, -2px) rotate(-1deg); }
-        }
+        #flash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; z-index: 100; pointer-events: none; }
+        @keyframes flash-anim { 0% { opacity: 0; } 10%, 30%, 50% { opacity: 1; } 20%, 40%, 60% { opacity: 0; } 100% { opacity: 0; } }
+        .flash-active { animation: flash-anim 0.6s ease-out; }
 
-        .shake-active {
-            animation: shake 0.5s infinite; /* Тряска будет идти бесконечно, пока играет музыка */
-        }
+        @keyframes shake { 0% { transform: translate(1px, 1px) rotate(0deg); } 20% { transform: translate(-3px, 0px) rotate(1deg); } 40% { transform: translate(1px, -1px) rotate(1deg); } 60% { transform: translate(-3px, 1px) rotate(0deg); } 80% { transform: translate(-1px, -1px) rotate(1deg); } 100% { transform: translate(1px, -2px) rotate(-1deg); } }
+        .shake-active { animation: shake 0.3s infinite; }
 
         .card { 
             background: rgba(255, 255, 255, 0.1); 
-            backdrop-filter: blur(25px); 
-            -webkit-backdrop-filter: blur(25px); 
-            padding: 10px; 
-            border-radius: 20px; 
-            max-width: 310px; 
-            width: 85%; 
-            max-height: 92vh; 
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.8); 
-            border: 1px solid rgba(255,255,255,0.15); 
-            position: relative; 
-            z-index: 2; 
-            transition: all 0.3s ease;
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); 
+            padding: 10px; border-radius: 20px; max-width: 310px; width: 85%; max-height: 95vh; 
+            display: flex; flex-direction: column; justify-content: space-between;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.15); 
+            position: relative; z-index: 2; 
         }
         
-        h1 { font-size: 18px; margin: 5px 0; }
         #guest { font-size: 18px; margin: 0 0 5px; color: #ffd700; font-weight: bold; }
+        .highlight { font-weight: bold; display: block; margin: 5px 0; font-size: 15px; color: #ffb6c1; text-transform: uppercase; text-shadow: 0 0 8px #ff69b4; }
+        .invite-photo { width: 100%; height: 160px; object-fit: cover; border-radius: 15px; margin: 5px auto; display: block; filter: blur(15px); transition: opacity 0.8s ease, filter 1.2s ease; }
         
-        .highlight { 
-            font-weight: bold; 
-            display: block; 
-            margin: 5px 0; 
-            font-size: 15px; 
-            color: #ffb6c1; 
-            text-transform: uppercase;
-            text-shadow: 0 0 8px #ff69b4; 
-        }
+        /* СТИЛИ СЧЕТЧИКА */
+        .countdown { display: flex; justify-content: space-around; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 10px; margin: 5px 0; font-size: 10px; }
+        .countdown-item { display: flex; flex-direction: column; }
+        .countdown-item span { font-size: 14px; font-weight: bold; color: #00ff88; }
 
-        .invite-photo { 
-            width: 100%; 
-            height: 170px; 
-            object-fit: cover; 
-            border-radius: 15px; 
-            margin: 5px auto; 
-            display: block; 
-            filter: blur(15px); 
-            transition: opacity 0.8s ease, filter 1.2s ease; 
-        }
-
-        .bottom-info { background: rgba(0, 0, 0, 0.5); padding: 8px; border-radius: 12px; font-size: 11px; line-height: 1.4; text-align: left; }
-        .bottom-info a { color: #00ff88; text-decoration: none; font-weight: bold; }
-
+        .bottom-info { background: rgba(0, 0, 0, 0.5); padding: 8px; border-radius: 12px; font-size: 11px; text-align: left; }
         .btn-container { min-height: 50px; margin-top: 5px; display: flex; justify-content: center; align-items: center; gap: 10px; }
-        
         button { font-size: 14px; padding: 10px 18px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
         #yes { background: linear-gradient(135deg, #00c853, #b2ff59); color: #003300; }
-        #no { background: #ff1744; color: white; transition: all 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28); }
-        
-        #message { display: none; margin-top: 5px; font-size: 15px; font-weight: bold; color: #00ff88; text-transform: uppercase; }
+        #no { background: #ff1744; color: white; transition: all 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28); position: relative; }
+        #message { display: none; margin-top: 5px; font-size: 15px; font-weight: bold; color: #00ff88; }
     </style>
 </head>
 <body>
+
+<div id="flash-overlay"></div>
 
 <div class="card" id="mainCard">
     <h1>🎂 VIP Приглашение</h1>
     <p id="guest">Загрузка...</p>
     <div class="invite-text" style="font-size: 12px;">
         Дорогой друг! 📩<br>
-        <span class="highlight">Приглашаю тебя на день рождения моей любимой Кули 🎂✨</span>
+        <span class="highlight">День рождения моей любимой Кули 🎂✨</span>
+    </div>
+
+    <div class="countdown" id="timer">
+        <div class="countdown-item"><span id="days">00</span>дней</div>
+        <div class="countdown-item"><span id="hours">00</span>часов</div>
+        <div class="countdown-item"><span id="minutes">00</span>мин</div>
+        <div class="countdown-item"><span id="seconds">00</span>сек</div>
     </div>
 
     <img src="1.jpg" class="invite-photo" id="mainPhoto">
 
     <div class="bottom-info">
         👗 Дресс-код: розово-белые тона<br>
-        📍 <a href="https://2gis.kz/aktobe/geo/70030076394441340" target="_blank">Адрес: СК Строитель 4, 54А 🔗</a><br>
+        📍 <a href="https://2gis.kz/aktobe/geo/70030076394441340" target="_blank" style="color: #00ff88; text-decoration: none;">Адрес: СК Строитель 4, 54А 🔗</a><br>
         📅 30 апреля | ⏰ 17:00
     </div>
 
@@ -108,23 +76,39 @@
     <div id="message">✨ ТЫ В СПИСКЕ ГОСТЕЙ ✨</div>
 </div>
 
-<audio id="bgMusic" loop preload="auto">
-    <source src="music.mp3" type="audio/mpeg">
+<audio id="bgMusic" loop preload="auto"><source src="music.mp3" type="audio/mpeg"></audio>
+<audio id="failSound" preload="auto">
+    <source src="fail.mp3" type="audio/mpeg">
+    <source src="https://www.myinstants.com/media/sounds/boing_poing.mp3" type="audio/mpeg">
 </audio>
 
 <script>
     const params = new URLSearchParams(window.location.search);
     document.getElementById('guest').textContent = `Привет, ${params.get('name') || 'Друг'}!`;
 
-    const yesBtn = document.getElementById('yes');
     const noBtn = document.getElementById('no');
     const bgMusic = document.getElementById('bgMusic');
+    const failSound = document.getElementById('failSound');
     const mainPhoto = document.getElementById('mainPhoto');
     const mainCard = document.getElementById('mainCard');
+    const flash = document.getElementById('flash-overlay');
+
+    // ЛОГИКА СЧЕТЧИКА
+    const targetDate = new Date("April 30, 2026 17:00:00").getTime();
+    function updateTimer() {
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+        if (diff > 0) {
+            document.getElementById('days').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('hours').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById('minutes').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('seconds').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+        }
+    }
+    setInterval(updateTimer, 1000);
 
     const photos = ["1.jpg", "2.jpg", "3.jpg", "4.jpg", "5.jpg"]; 
     let currentIndex = 0;
-
     setInterval(() => {
         mainPhoto.style.opacity = 0;
         setTimeout(() => {
@@ -135,31 +119,31 @@
     }, 3500);
 
     function moveBtn() {
+        // Проигрываем звук "убегания"
+        failSound.currentTime = 0;
+        failSound.play().catch(() => {});
+
         noBtn.style.position = 'fixed';
-        const padding = 20;
-        const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-        const maxY = window.innerHeight - noBtn.offsetHeight - padding;
-        noBtn.style.left = Math.max(padding, Math.random() * maxX) + 'px';
-        noBtn.style.top = Math.max(padding, Math.random() * maxY) + 'px';
+        const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+        const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+        noBtn.style.left = Math.max(20, Math.random() * maxX) + 'px';
+        noBtn.style.top = Math.max(20, Math.random() * maxY) + 'px';
     }
     noBtn.addEventListener('mouseover', moveBtn);
     noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveBtn(); });
 
     function startParty() {
+        flash.classList.add('flash-active');
         bgMusic.play().catch(e => console.log("Музыка ждет"));
-        
-        // ВКЛЮЧАЕМ ТРЯСКУ
-        mainCard.classList.add('shake-active');
-
+        setTimeout(() => { mainCard.classList.add('shake-active'); }, 100);
         mainPhoto.style.filter = "blur(0px)";
         document.getElementById('message').style.display = 'block';
-        yesBtn.style.display = 'none';
+        document.getElementById('yes').style.display = 'none';
         noBtn.style.display = 'none';
-
         var end = Date.now() + (5 * 1000);
         (function frame() {
-            confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff69b4', '#ffffff', '#ffd700'] });
-            confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff69b4', '#ffffff', '#ffd700'] });
+            confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff69b4', '#ffffff', '#ffd700'] });
+            confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff69b4', '#ffffff', '#ffd700'] });
             if (Date.now() < end) { requestAnimationFrame(frame); }
         }());
     }
